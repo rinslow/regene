@@ -1,3 +1,9 @@
+# PyCharm
 .idea/*
-.pyc
 .cache/*
+
+# Python
+*.pyc
+
+# Linux
+*.swp
