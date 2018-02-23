@@ -19,4 +19,4 @@ class Regene(object):
 
     def minimal(self) -> str:
         """Minimal string that would match a given expression."""
-        return Expression(self._precompiled_experssion()).suggest()
+        pass

@@ -15,8 +15,6 @@ class Between(Quantifier):
     def quantify(self, expression: Expression) -> Expression:
         return expression * self.start
 
-    def __int__(self):
-        return self.start
 
 class Exactly(Quantifier):
     def __init__(self, value: int):
@@ -25,27 +23,17 @@ class Exactly(Quantifier):
     def quantify(self, expression: Expression) -> Expression:
         return expression * self.value
 
-    def __int__(self):
-        return self.value
 
 class OneOrMore(Quantifier):
     def quantify(self, expression: Expression) -> Expression:
         return expression
-
-    def __int__(self):
-        return 1
 
 
 class ZeroOrMore(Quantifier):
     def quantify(self, expression: Expression) -> Expression:
         return EmptyExpression()
 
-    def __int__(self):
-        return 0
 
 class ZeroOrOne(Quantifier):
     def quantify(self, expression: Expression) -> Expression:
         return EmptyExpression()
-
-    def __int__(self):
-        return 0

@@ -14,6 +14,7 @@ class CharacterClass(Expression):
     def __mul__(self, other):
         return String(str(self)) * other
 
+
 class RangedCharacterClass(Expression):
     def __init__(self, ranges: List[Tuple[str, str]], characters: List[str]):
         self.ranges = ranges
@@ -53,9 +54,8 @@ class CharacterClassFactory:
             index += 1
 
             # We're parsing a range
-            if (index < len(string) - 1 and
-                string[index + 1] == "-" and
-                string[index] != "\\"):
+            if (index < len(string) - 1 and string[index + 1] == "-" and
+                    string[index] != "\\"):
 
                 ranges += (string[index], string[index + 2])
                 index += 2
