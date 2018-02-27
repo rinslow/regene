@@ -54,6 +54,15 @@ class Braces:
         except IndexError:
             return self.string
 
+    @classmethod
+    def exists(cls, string: str):
+        try:
+            cls(string).indices()
+            return True
+
+        except IndexError:
+            return False
+
 
 class Brackets(Braces):
     OPEN = "["

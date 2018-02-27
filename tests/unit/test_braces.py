@@ -39,6 +39,10 @@ class BracesTest(TestCase):
         assert Braces("(Hello)B").before() == ""
         assert Braces("AB").before() == ""
 
+    def test_exists(self):
+        assert not Braces.exists("ab")
+        assert Braces.exists("ab()")
+
 
 class CurlyBracesTest(TestCase):
     def test_simple(self):
@@ -76,6 +80,10 @@ class CurlyBracesTest(TestCase):
         assert CurlyBraces("{Hello}B").before() == ""
         assert CurlyBraces("AB").before() == ""
 
+    def test_exists(self):
+        assert not CurlyBraces.exists("ab")
+        assert CurlyBraces.exists("ab{}")
+
 
 class BracketsTest(TestCase):
     def test_simple(self):
@@ -112,3 +120,7 @@ class BracketsTest(TestCase):
         assert Brackets("A[Hello]").before() == "A"
         assert Brackets("[Hello]B").before() == ""
         assert Brackets("AB").before() == ""
+
+    def test_exists(self):
+        assert not Brackets.exists("ab")
+        assert Brackets.exists("ab[]")
