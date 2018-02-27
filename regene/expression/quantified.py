@@ -1,7 +1,7 @@
-from regene.expression import Expression, Quantifier, Exactly
+from regene.expression import Expression, Quantifier
 
 
-class Group(Expression):
+class Quantified(Expression):
     def __init__(self, expression: Expression, quantifier: Quantifier):
         self.value = quantifier.quantify(expression)
 
