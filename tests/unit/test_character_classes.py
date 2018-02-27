@@ -20,3 +20,9 @@ class TestCharacterSet(TestCase):
 
     def test_dash(self):
         assert str(CharacterClassFactory.get("[\-]")) == "-"
+
+    def test_multiplication(self):
+        assert CharacterClassFactory.get("[abc]") * 4 == "aaaa"
+
+    def test_ranged_multiplication(self):
+        assert CharacterClassFactory.get("[b-z]") * 4 == "bbbb"
