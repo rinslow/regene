@@ -1,6 +1,3 @@
-from regene.expression import Expression
-
-
 class Regene(object):
     def __init__(self, expression: str):
         self.expression = expression
@@ -8,6 +5,9 @@ class Regene(object):
     def random(self) -> str:
         """A random string that would match given expression."""
         raise NotImplementedError("No support for randoms yet.")
+
+    def minimal(self) -> str:
+        raise NotImplementedError("No support for minimals yet.")
 
     def _precompiled_experssion(self):
         return (self.expression.replace(r"\d", r"[0-9]")
@@ -17,6 +17,6 @@ class Regene(object):
                                .replace(r"\w", r"[a-zA-Z_0-9]")
                                .replace(r"\W", r"[^a-zA-Z_0-9]"))
 
-    def minimal(self) -> str:
+    def simple(self) -> str:
         """Minimal string that would match a given expression."""
-        pass
+        raise NotImplementedError("No support for simples yet.")
