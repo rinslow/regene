@@ -19,7 +19,7 @@ class RegularExpressionsPartsTest(TestCase):
         assert RegularExpression("[]").parts() == ["[", "]"]
         assert RegularExpression("]]][").parts() == ["]", "]", "]", "["]
 
-        # Curly Brackets
+        # Curly Braces
         assert RegularExpression("{").parts() == ["{"]
         assert RegularExpression("{}").parts() == ["{", "}"]
         assert RegularExpression("}}}{").parts() == ["}", "}", "}", "{"]
@@ -34,5 +34,5 @@ class RegularExpressionsPartsTest(TestCase):
 
     def test_complex_regular_expressions(self):
         assert RegularExpression("(abc)+").parts() == ["(", "abc", ")", "+"]
-        assert RegularExpression("[A-Zd]+?").parts() == ["[", "A-Z", "d",
-                                                         "]", "+", "?"]
+        assert RegularExpression("[^A-Zd]+?").parts() == ["[", "^", "A-Z",
+                                                          "d", "]", "+", "?"]

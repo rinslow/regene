@@ -1,16 +1,21 @@
-from typing import Tuple
+from typing import Tuple, Union
+
+from regene.compile.regular_expression import RegularExpression
 
 
 class Braces:
     OPEN = "("
     CLOSE = ")"
 
-    def __init__(self, string: str):
-        self.string = string
+    def __init__(self, expression: Union[RegularExpression, str]):
+        if isinstance(expression, str):
+            expression = RegularExpression(expression)
 
-    def indices(self) -> Tuple[int, int]:
+        self.expression = expression
+
+    def _indices(self) -> Tuple[int, int]:
         try:
-            start = self.string.index(self.OPEN)
+            start = self.expression.parts().index(self.OPEN)
 
         except ValueError:
             raise IndexError("No opening %r found" % self.__class__.__name__)
@@ -19,7 +24,7 @@ class Braces:
 
     def _find_end_by_start_index(self, start_index) -> int:
         stack = []
-        for index, char in enumerate(self.string[start_index:]):
+        for index, char in enumerate(self.expression.parts()[start_index:]):
             if char == self.OPEN:
                 stack.append(char)
 
@@ -30,34 +35,37 @@ class Braces:
 
         raise IndexError("No closing %r found" % self.__class__.__name__)
 
-    def within(self) -> str:
+    def within(self) -> RegularExpression:
         try:
-            start, end = self.indices()
-            return self.string[start + 1: end]
+            start, end = self._indices()
+            parts_within = self.expression.parts()[start + 1: end]
+            return RegularExpression(parts_within)
 
         except IndexError:
-            return ""
+            return RegularExpression("")
 
-    def before(self) -> str:
+    def before(self) -> RegularExpression:
         try:
-            start, _ = self.indices()
-            return self.string[:start]
+            start, _ = self._indices()
+            parts_before = self.expression.parts()[:start]
+            return RegularExpression(parts_before)
 
         except IndexError:
-            return ""
+            return RegularExpression("")
 
-    def after(self) -> str:
+    def after(self) -> RegularExpression:
         try:
-            start, end = self.indices()
-            return self.string[end + 1:]
+            start, end = self._indices()
+            parts_after = self.expression.parts()[end + 1:]
+            return RegularExpression(parts_after)
 
         except IndexError:
-            return self.string
+            return self.expression
 
     @classmethod
     def exists(cls, string: str):
         try:
-            cls(string).indices()
+            cls(string)._indices()
             return True
 
         except IndexError:
