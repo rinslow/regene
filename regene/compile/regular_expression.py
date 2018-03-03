@@ -1,5 +1,5 @@
 import re
-from typing import List, Union
+from typing import List, Union, Iterator
 
 from functools import lru_cache
 
@@ -17,8 +17,8 @@ class RegularExpression:
     def __repr__(self):
         return repr(self.string)
 
-    def __iter__(self):
-        return iter(self.string)
+    def __iter__(self) -> Iterator[str]:
+        return iter(self.parts())
 
     def __eq__(self, other):
         return str(self) == str(other)
@@ -26,13 +26,25 @@ class RegularExpression:
     def __hash__(self):
         return hash(self.string)
 
+    def __bool__(self):
+        return bool(self.string)
+
+    def __len__(self):
+        return len(self.parts())
+
+    def __getitem__(self, item):
+        return RegularExpression(self.parts()[item])
+
     @lru_cache(maxsize=None)
     def parts(self) -> List[str]:
         result = re.findall("[a-zA-Z0-9]-[a-zA-Z0-9]|"  # sets
+                            "{\d+}|"
+                            "{\d+,}|"
+                            "{,\d+}|"
+                            "{\d+,\d+}|"
                             "\w+|"  # string
                             "\)|\(|"  # braces
                             "\]|\[|"  # braces
-                            "}|{|"  # braces
                             "[+?*]|"  # quantifiers
                             "[\^]",
                             self.string)

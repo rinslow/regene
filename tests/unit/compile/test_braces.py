@@ -24,5 +24,18 @@ class BracesTest(TestCase):
         assert Braces("AB").before() == ""
 
     def test_exists(self):
-        assert not Braces.exists("ab")
-        assert Braces.exists("ab()")
+        assert not Braces.exists(RegularExpression("ab"))
+        assert Braces.exists(RegularExpression("ab()"))
+
+    def test_all(self):
+        assert Braces("A(Hello)B").all() == "(Hello)"
+        assert Braces("A((Hello))").all() == "((Hello))"
+        assert Braces("((Hello)))B").all() == "((Hello))"
+
+    def test_latest(self):
+        assert Braces("(abc)f(def)", latest=0).all() == "(abc)"
+        assert Braces("(abc)f(def)", latest=4).all() == "(def)"
+
+    def test_indices(self):
+        # assert Braces("(abc)f(def)").indices() == (0, 3)
+        assert Braces("(abc)").indices() == (0, 2)
