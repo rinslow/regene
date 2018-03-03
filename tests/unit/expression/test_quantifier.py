@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from regene.expression import (Between, Exactly, ZeroOrOne, ZeroOrMore,
-                               OneOrMore)
+                               OneOrMore, ValueOrMore, ValueOrLess)
 from regene.expression.string import String
 
 
@@ -24,3 +24,9 @@ class TestQuantifiers(TestCase):
 
     def test_zero_or_one(self):
         assert ZeroOrOne().quantify(String("1")) == ""
+
+    def test_value_or_more(self):
+        assert ValueOrMore(4).quantify(String("1")) == "1111"
+
+    def test_value_or_less(self):
+        assert ValueOrLess(4).quantify(String("1")) == ""

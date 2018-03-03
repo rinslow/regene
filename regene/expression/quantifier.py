@@ -37,3 +37,19 @@ class ZeroOrMore(Quantifier):
 class ZeroOrOne(Quantifier):
     def quantify(self, expression: Expression) -> Expression:
         return EmptyExpression()
+
+
+class ValueOrMore(Quantifier):
+    def __init__(self, value):
+        self.value = value
+
+    def quantify(self, expression: Expression):
+        return expression * self.value
+
+
+class ValueOrLess(Quantifier):
+    def __init__(self, value):
+        self.value = value
+
+    def quantify(self, expression: Expression):
+        return EmptyExpression()

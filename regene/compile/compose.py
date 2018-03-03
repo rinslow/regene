@@ -2,10 +2,49 @@ from typing import Iterator
 
 from regene.compile.braces import Braces, Brackets, CurlyBraces
 from regene.compile.regular_expression import RegularExpression
+from regene.expression import Expression
+from regene.expression.group import Group
+from regene.expression.string import String
 
 
 class Composer:
-    pass
+    def __init__(self, expression: RegularExpression):
+        self.expression = expression
+
+    def build(self, expression: RegularExpression) -> Iterator[Expression]:
+        peeled_list = list(Peeler(self.expression))
+        index = 0
+
+        while index < len(peeled_list):
+
+            if (index + 1 < len(peeled_list) and
+                    self.is_quantifier(peeled_list[index + 1])):
+                pass
+
+            elif self.is_character_set(peeled_list[index]):
+                pass
+
+            elif self.is_group(peeled_list[index]):
+                pass
+
+            else:
+                yield String(str(peeled_list[index]))
+
+            index += 1
+
+    def enter(self) -> Group:
+        """Entry point to the recursive method build()."""
+        return Group(list(self.build(self.expression)))
+
+    def is_quantifier(self, expression: RegularExpression) -> bool:
+        return any([expression in ("+", "?", "*"),
+                    str(expression).startswith("{")])
+
+    def is_character_set(self, expression: RegularExpression) -> bool:
+        return str(expression).startswith("[")
+
+    def is_group(self, expression: RegularExpression) -> bool:
+        return str(expression).startswith("(")
 
 
 class Peeler:

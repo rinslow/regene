@@ -1,3 +1,7 @@
+from regene.compile.compose import Composer
+from regene.compile.regular_expression import RegularExpression
+
+
 class Regene(object):
     def __init__(self, expression: str):
         self.expression = expression
@@ -19,4 +23,4 @@ class Regene(object):
 
     def simple(self) -> str:
         """Minimal string that would match a given expression."""
-        raise NotImplementedError("No support for simples yet.")
+        return str(Composer(RegularExpression(self.expression)).enter())

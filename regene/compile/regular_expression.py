@@ -35,6 +35,9 @@ class RegularExpression:
     def __getitem__(self, item):
         return RegularExpression(self.parts()[item])
 
+    def __contains__(self, item):
+        return item in str(self)
+
     @lru_cache(maxsize=None)
     def parts(self) -> List[str]:
         result = re.findall("[a-zA-Z0-9]-[a-zA-Z0-9]|"  # sets
