@@ -4,6 +4,7 @@ from regene.compile.braces import Braces, Brackets, CurlyBraces
 from regene.compile.quantifier_factory import QuantifierFactory
 from regene.compile.regular_expression import RegularExpression
 from regene.expression import Expression
+from regene.expression.character_class import CharacterClassFactory
 from regene.expression.group import Group
 from regene.expression.quantified import Quantified
 from regene.expression.string import String
@@ -21,26 +22,32 @@ class Composer:
 
             if (index + 1 < len(peeled_list) and
                     self.is_quantifier(peeled_list[index + 1])):
-                yield self.quantify(index, peeled_list)
+                yield self.quantify(peeled_list[index + 1],
+                                    peeled_list[index])
                 index += 2
                 continue
 
             elif self.is_character_set(peeled_list[index]):
-                pass
+                yield self.setify(peeled_list[index])
+                index += 1
+                continue
 
             elif self.is_group(peeled_list[index]):
-                yield self.groupify(index, peeled_list)
+                yield self.groupify(peeled_list[index])
                 index += 1
                 continue
 
             else:
-                yield String(str(peeled_list[index]))
+                yield self.stringify(peeled_list[index])
                 index += 1
                 continue
 
-    def quantify(self, index, peeled_list) -> Expression:
-        quantifier = QuantifierFactory.get(peeled_list[index + 1])
-        compiled_content = list(self.build(peeled_list[index]))
+    def stringify(self, string_expression):
+        return String(str(string_expression))
+
+    def quantify(self, quantifier_exp, pre_quantifier_exp) -> Expression:
+        quantifier = QuantifierFactory.get(quantifier_exp)
+        compiled_content = list(self.build(pre_quantifier_exp))
         # If we need to quantify a String, we quantify the last character
         if type(compiled_content[-1]) is String:
             return Group([
@@ -52,8 +59,10 @@ class Composer:
             quantified = Group(compiled_content)
             return Quantified(quantified, quantifier)
 
-    def groupify(self, index, peeled_list) -> Group:
-        groupped_expression = peeled_list[index]
+    def setify(self, set_expression):
+        return CharacterClassFactory.get(str(set_expression))
+
+    def groupify(self, groupped_expression) -> Group:
         within_expression = Braces(groupped_expression).within()
         compiled_content = list(self.build(within_expression))
         return Group(compiled_content)

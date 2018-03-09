@@ -36,6 +36,15 @@ class QuantifierTest(TestCase):
     def test_value_or_less(self):
         assert Regene("ab{,6}").simple() == "a"
 
+    def test_multiple_quantifiers(self):
+        assert Regene("(ab)+(cd)+").simple() == "abcd"
+
+    def test_different_kinds_of_quantifiers_in_one_expression(self):
+        assert Regene("ab?cd+c+").simple() == "acdc"
+
+    def test_quantifier_in_middle_of_string(self):
+        assert Regene("ab{2}c").simple() == "abbc"
+
 
 class GroupTest(TestCase):
     def test_group_plus(self):
@@ -58,3 +67,29 @@ class GroupTest(TestCase):
 
     def test_group_value_or_less(self):
         assert Regene("a(b){,6}").simple() == "a"
+
+
+class SetTest(TestCase):
+    def test_plus(self):
+        assert Regene("[ab]+").simple() == "a"
+
+    def test_question_mark(self):
+        assert Regene("[ab]?").simple() == ""
+
+    def test_star(self):
+        assert Regene("[ab]*c").simple() == "c"
+
+    def test_between(self):
+        assert Regene("[b-z]{4,5}a").simple() == "bbbba"
+
+    def test_exactly(self):
+        assert Regene("[abc]{2}").simple() == "aa"
+
+    def test_value_or_more(self):
+        assert Regene("a[b]{1,}").simple() == "ab"
+
+    def test_value_or_less(self):
+        assert Regene("[a]").simple() == "a"
+
+    def test_set_in_start_of_string(self):
+        assert Regene("[a]bcc").simple() == "abcc"
