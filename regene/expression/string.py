@@ -18,3 +18,6 @@ class String(Expression):
 
     def __mul__(self, other):
         return String(self.value * other)
+
+    def __getitem__(self, item):
+        return self.value[item]

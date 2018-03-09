@@ -14,6 +14,7 @@ class Regene(object):
         raise NotImplementedError("No support for minimals yet.")
 
     def _precompiled_experssion(self):
+        # TODO: Remove spaces from quantifiers
         return (self.expression.replace(r"\d", r"[0-9]")
                                .replace(r"\D", r"[^0-9]")
                                .replace(r"\s", r"[ \t\n\f\r]")
